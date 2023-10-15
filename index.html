@@ -4,7 +4,24 @@
     <meta charset = "UTF-8">
   </head>
   <body>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+    <div id="computerGuess"></div>
+    <div id="playerGuess"></div>
+    <div id="results"></div>
+    <div id="playerTot"></div>
+    <div id="computerTot"></div>
+    <div id="winner"></div>
+
     <script>
+      const results = document.querySelector("#results");
+      const computerGuess = document.querySelector("#computerGuess");
+      const playerGuess = document.querySelector("#playerGuess");
+      const playerTot = document.querySelector("#playerTot");
+      const computerTot = document.querySelector("#computerTot");
+      const winner = document.querySelector("#winner");
+
       function getComputerChoice() {
         let computerChoice = Math.floor(Math.random()*3+1);
         if (computerChoice === 1) {
@@ -16,93 +33,83 @@
         else {
           return("scissors");
         }
-      }     
-
-      function getPlayerChoice() {
-        let playerChoice = window.prompt("Enter your Guess").toLowerCase();
-        return playerChoice;
       }
 
+      let playerScore = 0;
+      let computerScore = 0;
+      let playerChoice;
+      let computerChoice = getComputerChoice();
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            playerChoice = button.id;
+            let computerChoice = getComputerChoice();
+            playRound(playerChoice,computerChoice);
+            playerGuess.textContent = `Player Guess: ${playerChoice}`;
+            computerGuess.textContent = `Computer Guess: ${computerChoice}`;
+            playerTot.textContent = `Player Score: ${playerScore}`;
+            computerTot.textContent = `Computer Score: ${computerScore}`;
+            if (playerScore == 5 || computerScore == 5) {
+              playerScore = 0;
+              computerScore = 0;
+              if (playerScore > computerScore) {
+                winner.textContent = "Congratulations, You Win!"
+              }
+              else {
+                winner.textContent = "Better luck next time, You Lose!"
+              }
+            }
+            else {
+              winner.textContent = "";
+            }
+          });
+        });
+      
       function playRound(playerChoice, computerChoice) {
         if (playerChoice == "rock") {
           if (computerChoice == "paper") {
-            return "You Lose! Paper beats Rock";
+            //results.textContent = "You Lose! Paper beats Rock";
+            computerScore ++;
           }
           else if (computerChoice == "scissors") {
-            return "You Win! Rock beats Scissors";
+            //results.textContent = "You Win! Rock beats Scissors";
+            playerScore ++;
           }
           else {
-           return "Tie! Try again!";
+            //results.textContent = "Tie! Try again!";
           }
         }
         else if (playerChoice == "paper") {
           if (computerChoice == "rock") {
-            return "You Win! Paper beats Rock";
+            //results.textContent = "You Win! Paper beats Rock";
+            playerScore ++;
           }
           else if (computerChoice == "scissors") {
-            return "You Lose! Scissors beats Paper";
+            //results.textContent = "You Lose! Scissors beats Paper";
+            computerScore ++;
           }
           else {
-            return "Tie! Try again!";
+            //results.textContent = "Tie! Try again!";
           }
         }
         else if (playerChoice == "scissors") {
           if (computerChoice == "rock") {
-            return "You Lose! Rock beats Scissors";
+            //results.textContent = "You Lose! Rock beats Scissors";
+            computerScore ++;
           }
           else if (computerChoice == "paper") {
-            return "You Win! Scissors beats Paper";
+            //results.textContent = "You Win! Scissors beats Paper";
+            playerScore ++;
           }
           else if (playerChoice == computerChoice) {
-            return "Tie! Try again!";
+            //results.textContent = "Tie! Try again!";
           }
           else {
-            return "That's not an option! Try again!";
+            //results.textContent = "That's not an option! Try again!";
           }
         }
       }
 
-      function game() {
-        let playerScore = 0;
-        let computerScore = 0;
-        let turn = 5;
-        for (let i = 5; i > 0; i--) {
-          let computerChoice = getComputerChoice();
-          let playerChoice = getPlayerChoice();
-          playRound(playerChoice, computerChoice);
-          let result = playRound(playerChoice, computerChoice);
-          turn --;
-
-          if (result == "You Win! Paper beats Rock" || result == "You Win! Rock beats Scissors" || result == "You Win! Scissors beats Paper") {
-          playerScore ++;
-          }
-          else if (result == "You Lose! Rock beats Scissors" || result == "You Lose! Scissors beats Paper" || result == "You Lose! Paper beats Rock") {
-          computerScore ++;
-          }
-
-        console.log(`Player Guess: ${playerChoice}`);
-        console.log(`Computer Guess: ${computerChoice}`);
-        console.log(result);
-        console.log(`Player Score: ${playerScore}`);
-        console.log(`Computer Score: ${computerScore}`);
-        console.log("");
-        }
-
-        if (turn === 0) {
-          let winner = "";
-          if (playerScore > computerScore) {
-            winner = "Congratulations! You Win!";
-          }
-          else {
-            winner = "Uh Oh! You Lost!";
-          }
-          console.log(winner);
-        }
-        
-      }
-
-      game()
-      
     </script>
   </body>
 </html>
